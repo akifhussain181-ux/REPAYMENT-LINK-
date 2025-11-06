@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 2px solid #007bff;
+        }
+        
+        .header {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        
+        .customer-name {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .upi-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #007bff;
+        }
+        
+        .upi-label {
+            font-size: 14px;
+            color: #007bff;
+            margin-bottom: 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .upi-id-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #007bff;
+        }
+        
+        .upi-id {
+            font-size: 16px;
+            color: #333;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+        
+        .copy-btn.copied {
+            background: #28a745;
+        }
+        
+        .amount {
+            font-size: 28px;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            display: inline-block;
+            border: 2px solid #007bff;
+        }
+        
+        .qr-code {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #007bff;
+        }
+        
+        .qr-placeholder {
+            width: 180px;
+            height: 180px;
+            background: #007bff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 0 auto;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .scan-text {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .apps-section {
+            margin: 25px 0;
+        }
+        
+        .apps-label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .app-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+        
+        .app-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .url-generator {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #007bff;
+        }
+        
+        .url-generator h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #007bff;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .generate-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .generate-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .generated-url {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            display: none;
+            color: #333;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            font-size: 14px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">UPI Payment</div>
+        
+        <!-- Customer Name - URL se aayega -->
+        <div class="customer-name" id="customerName">Customer: </div>
+        
+        <!-- UPI ID Section with Copy Button -->
+        <div class="upi-section">
+            <div class="upi-label">UPI ID</div>
+            <div class="upi-id-container">
+                <div class="upi-id" id="upiId">Loading...</div>
+                <button class="copy-btn" onclick="copyUPI()">
+                    <span>📋</span>
+                    Copy
+                </button>
+            </div>
+        </div>
+        
+        <!-- Amount -->
+        <div class="amount" id="amountDisplay">₹ 0.00</div>
+        
+        <!-- QR Code Section -->
+        <div class="qr-code">
+            <div class="qr-placeholder">
+                SCAN QR CODE<br>TO PAY
+            </div>
+            <div class="scan-text">Scan with any UPI App</div>
+        </div>
+        
+        <!-- UPI Apps Section -->
+        <div class="apps-section">
+            <div class="apps-label">Pay with UPI Apps</div>
+            <div class="apps-grid">
+                <button class="app-btn" onclick="openApp('paytm')">
+                    <span>📱</span>
+                    Paytm
+                </button>
+                <button class="app-btn" onclick="openApp('phonepe')">
+                    <span>📱</span>
+                    PhonePe
+                </button>
+                <button class="app-btn" onclick="openApp('gpay')">
+                    <span>📱</span>
+                    GPay
+                </button>
+                <button class="app-btn" onclick="openApp('mobikwik')">
+                    <span>📱</span>
+                    Mobikwik
+                </button>
+            </div>
+        </div>
+
+        <!-- URL Generator Section -->
+        <div class="url-generator">
+            <h3>🔗 Create New Payment Link</h3>
+            <div class="form-group">
+                <label>Customer Name</label>
+                <input type="text" id="inputCustomer" placeholder="Enter customer name" value="Rajesh Kumar">
+            </div>
+            <div class="form-group">
+                <label>UPI ID</label>
+                <input type="text" id="inputUpi" placeholder="Enter UPI ID" value="rajesh.kumar@oksbi">
+            </div>
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="inputAmount" placeholder="Enter amount" value="1500">
+            </div>
+            <button class="generate-btn" onclick="generateCustomURL()">
+                Generate Payment Link
+            </button>
+            <div class="generated-url" id="generatedURL">
+                <!-- Generated URL will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL Parameters se data extract karein
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                customer: params.get('customer') || 'Rajesh Kumar',
+                upi: params.get('upi') || 'rajesh.kumar@oksbi',
+                amount: params.get('amount') || '1500'
+            };
+        }
+
+        // Page load par data set karein
+        function initializePage() {
+            const { customer, upi, amount } = getUrlParams();
+            
+            // Set values in the page
+            document.getElementById('customerName').textContent = `Customer: ${customer}`;
+            document.getElementById('upiId').textContent = upi;
+            document.getElementById('amountDisplay').textContent = `₹ ${parseInt(amount).toLocaleString('en-IN')}.00`;
+            
+            // Set values in URL generator form
+            document.getElementById('inputCustomer').value = customer;
+            document.getElementById('inputUpi').value = upi;
+            document.getElementById('inputAmount').value = amount;
+        }
+
+        // Custom URL generate karein
+        function generateCustomURL() {
+            const customer = document.getElementById('inputCustomer').value || 'Customer';
+            const upi = document.getElementById('inputUpi').value || 'upi@id';
+            const amount = document.getElementById('inputAmount').value || '0';
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const customUrl = `${baseUrl}?customer=${encodeURIComponent(customer)}&upi=${encodeURIComponent(upi)}&amount=${amount}`;
+            
+            const urlDisplay = document.getElementById('generatedURL');
+            urlDisplay.innerHTML = `<strong>Payment Link:</strong><br>${customUrl}`;
+            urlDisplay.style.display = 'block';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(customUrl).then(() => {
+                showToast('Payment link copied to clipboard!');
+            });
+        }
+
+        // UPI ID Copy Function
+        function copyUPI() {
+            const upiId = document.getElementById('upiId');
+            const copyBtn = document.querySelector('.copy-btn');
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(upiId.textContent).then(() => {
+                copyBtn.innerHTML = '<span>✅</span> Copied!';
+                copyBtn.classList.add('copied');
+                showToast('UPI ID copied successfully!');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<span>📋</span> Copy';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // UPI Apps open karein
+        function openApp(appName) {
+            const upiId = document.getElementById('upiId').textContent;
+            const amount = document.getElementById('inputAmount').value;
+            
+            let url = '';
+            
+            switch(appName) {
+                case 'paytm':
+                    url = `paytmmp://pay?pa=${upiId}&pn=Customer&am=${amount}`;
+                    break;
+                case 'phonepe':
+                    url = `phonepe://pay?pa=${upiId}&pn=Customer&am=${amount}`;
+                    break;
+                case 'gpay':
+                    url = `tez://upi/pay?pa=${upiId}&pn=Customer&am=${amount}`;
+                    break;
+                case 'mobikwik':
+                    url = `mobikwik://upi/pay?pa=${upiId}&pn=Customer&am=${amount}`;
+                    break;
+            }
+            
+            // App open karne ki koshish karein
+            window.location.href = url;
+            
+            // Agar app installed nahi hai to 3 second baad fallback
+            setTimeout(() => {
+                if (!document.hidden) {
+                    // Agar app open nahi hui to UPI ID copy kar dein
+                    copyUPI();
+                    showToast('App not installed! UPI ID copied instead.');
+                }
+            }, 3000);
+        }
+
+        // Toast message show karein
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Page load par initialize karein
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
